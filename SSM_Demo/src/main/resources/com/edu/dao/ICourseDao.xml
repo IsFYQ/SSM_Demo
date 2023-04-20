@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.edu.dao.ICourseDao">
+    <resultMap id="CourseMapping" type="Course">
+        <id property="cid" column="cid"/>
+        <result property="cname" column="cname"/>
+        <result property="c_count" column="c_count"/>
+        <result property="teacher" column="teacher"/>
+        <collection property="student" ofType="Student">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="age" column="age"/>
+            <result property="pwd" column="pwd"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insertCourse" parameterType="com.edu.beans.Course">
+        insert into course(cname, c_count, teacher) values (#{cname}, #{c_count}, #{teacher})
+    </insert>
+
+    <delete id="deleteCourse">
+        delete from course where cid = #{cid}
+    </delete>
+
+    <update id="updateCourse" parameterType="com.edu.beans.Course">
+        update course set cname = #{cname}, c_count = #{c_count}, teacher = #{teacher} where cid = #{cid}
+    </update>
+
+    <update id="addCount">
+        UPDATE course
+        SET c_count = c_count + 1
+        WHERE cid = (
+            SELECT cid FROM course WHERE cname = #{cname}
+        )
+    </update>
+    <select id="getCourse" resultMap="CourseMapping">
+        select * from course
+    </select>
+
+    <select id="getCourseByCname" resultMap="CourseMapping">
+        select * from course where cname = #{cname}
+    </select>
+</mapper>

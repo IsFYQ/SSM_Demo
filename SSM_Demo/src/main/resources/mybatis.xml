@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--
+    mybatis-3-config.dtd是主配置文件的约束文件：
+    约束文件在mybatis的核心jar包的org.apache.ibatis.bulder.xml中可以找到
+ -->
+<configuration>
+    <!-- 会将所有的com.edu.beans中的简单类名作为别名 -->
+    <typeAliases>
+        <package name="com.edu.beans"/>
+    </typeAliases>
+    <mappers>
+        <!-- 映射文件的位置：包含包名 -->
+        <package name="com.edu.dao"/>
+    </mappers>
+</configuration>

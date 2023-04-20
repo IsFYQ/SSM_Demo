@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+ 这里的 mybatis-3-mapper.dtd是Mybatis的约束文件，类似于HTML中的约束文件，
+ 约束文件在mybatis的核心jar包的org.apache.ibatis.bulder.xml中可以找到
+-->
+<mapper namespace="com.edu.dao.IStudentDao">
+   <insert id="register">
+       insert into student(name, age, pwd) values(#{name}, #{age}, #{pwd})
+   </insert>
+
+    <update id="update">
+        update student set name = #{name}, age = #{age}, pwd=#{pwd} where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from student where id = #{id}
+    </delete>
+
+    <resultMap id="studentMapping" type="Student">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="age" column="age"/>
+        <result property="pwd" column="pwd"/>
+        <collection property="courses" ofType="Course">
+            <id property="cid" column="cid"/>
+            <result property="cname" column="cname"/>
+            <result property="c_count" column="c_count"/>
+            <result property="teacher" column="teacher"/>
+        </collection>
+    </resultMap>
+
+    <select id="select" resultMap="studentMapping">
+        select * from student
+    </select>
+    <select id="login" resultMap="studentMapping">
+        select * from student where name = #{name} and pwd = #{pwd}
+    </select>
+    <select id="selectStudentBySname" resultMap="studentMapping">
+        select * from student where name = #{sname}
+    </select>
+</mapper>

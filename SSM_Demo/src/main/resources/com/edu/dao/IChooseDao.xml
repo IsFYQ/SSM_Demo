@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.edu.dao.IChooseDao">
+
+    <resultMap id="ChooseMapping" type="Choose">
+        <id property="choose_id" column="choose_id"/>
+
+        <collection property="student" javaType="Student">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="age" column="age"/>
+            <result property="pwd" column="pwd"/>
+        </collection>
+
+        <collection property="course" javaType="Course">
+            <id property="cid" column="cid"/>
+            <result property="cname" column="cname"/>
+            <result property="c_count" column="c_count"/>
+            <result property="teacher" column="teacher"/>
+        </collection>
+    </resultMap>
+    <insert id="addChoose">
+        INSERT INTO choose (sid, cid)
+        SELECT student.id, course.cid
+        FROM student, course
+        WHERE student.name = #{student.name} AND course.cname = #{course.cname}
+    </insert>
+
+    <update id="updateChoose">
+        UPDATE choose ch
+        SET ch.cid = (SELECT c.cid FROM course c WHERE c.cname = #{course.cname})
+        WHERE ch.choose_id = #{choose_id}
+    </update>
+
+    <delete id="deleteChoose" parameterType="int">
+        delete from choose where choose_id = #{choose_id}
+    </delete>
+
+    <delete id="deleteChooseBySid">
+        delete from choose where sid = #{sid};
+    </delete>
+
+    <delete id="deleteChooseByCid">
+        delete from choose where cid = #{cid};
+    </delete>
+
+    <select id="queryChoose" resultMap="ChooseMapping">
+        select ch.*, s.*, c.*
+        from choose ch, student s, course c
+        WHERE ch.sid = s.id AND ch.cid = c.cid;
+</select>
+
+    <select id="queryChooseBySid" resultMap="ChooseMapping">
+        select ch.*, s.*, c.*
+        from choose ch, student s, course c
+        WHERE ch.sid = s.id AND ch.cid = c.cid and ch.sid = #{sid};
+    </select>
+
+    <select id="queryChooseByCid" resultMap="ChooseMapping">
+        select ch.*, s.*, c.*
+        from choose ch, student s, course c
+        WHERE ch.sid = s.id AND ch.cid = c.cid and ch.cid = #{cid};
+    </select>
+
+</mapper>
